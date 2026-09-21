@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "nome": "João Teste",
-        "email": "{{emailAlunoCriado}}",
+        "email": "{{emailUsuarioCriado}}",
         "senha": "joao123",
         "cidade": "Salinas",
         "frase": "Em testes",
@@ -22,13 +22,13 @@ runtime:
   scripts:
     - type: before-request
       code: |-
-        bru.deleteVar("alunoCriadoId");
+        bru.deleteVar("usuarioCriadoId");
         bru.deleteVar("tokenDono");
-        bru.setVar("emailAlunoCriado", `joao.teste.${Date.now()}@email.com`);
+        bru.setVar("emailUsuarioCriado", `joao.teste.${Date.now()}@email.com`);
     - type: after-response
       code: |-
         if (res.getBody().id) {
-          bru.setVar("alunoCriadoId", res.getBody().id);
+          bru.setVar("usuarioCriadoId", res.getBody().id);
         }
     - type: tests
       code: |-

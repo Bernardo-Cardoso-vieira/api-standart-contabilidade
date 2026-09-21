@@ -3,7 +3,7 @@ import express from "express"; // importa o Express
 import cors from "cors"; // novo import
 import logger from "./middlewares/logger.js"; // importa o middleware de log
 import tratarErro from "./middlewares/erro.js"; // novo import
-import alunosRouter from "./routes/alunos.js"; // importa o router de alunos
+import usuariosRouter from "./routes/alunos.js"; // importa o router de usuários
 import mensagensRouter from "./routes/mensagens.js"; // importa o router de mensagens
 import authRouter from "./routes/auth.js";
 
@@ -16,7 +16,7 @@ app.use(logger); // 3º — registra log de cada requisição
 
 // rota raiz — boas-vindas
 app.get("/", (req, res) => {
-  res.json({ mensagem: "Yearbook API está no ar! 🎓" });
+  res.json({ mensagem: "Biblioteca API está no ar!" });
 });
 
 // rota de health check
@@ -27,8 +27,8 @@ app.get("/status", (req, res) => {
 // monta as rotas em /auth/register e /auth/login
 app.use("/auth", authRouter);
 
-// registra as rotas de alunos com prefixo /alunos
-app.use("/alunos", alunosRouter);
+// registra as rotas de usuários com prefixo /usuarios
+app.use("/usuarios", usuariosRouter);
 
 // registra as rotas de mensagens com prefixo /mensagens
 app.use("/mensagens", mensagensRouter);

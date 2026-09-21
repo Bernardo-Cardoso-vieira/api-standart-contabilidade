@@ -1,18 +1,18 @@
 import { Router } from "express";
 import {
-  listarAlunos,
-  buscarAluno,
-  atualizarAluno,
-  deletarAluno,
+  listarUsuarios,
+  buscarUsuario,
+  atualizarUsuario,
+  deletarUsuario,
 } from "../controllers/alunosController.js";
 import autenticar from "../middlewares/autenticar.js";
 import autorizar from "../middlewares/autorizar.js";
 
 const router = Router();
 
-router.get("/", listarAlunos);
-router.get("/:id", buscarAluno);
-router.put("/:id", autenticar, atualizarAluno);
-router.delete("/:id", autenticar, autorizar("ADMIN"), deletarAluno);
+router.get("/", listarUsuarios);
+router.get("/:id", buscarUsuario);
+router.put("/:id", autenticar, atualizarUsuario);
+router.delete("/:id", autenticar, autorizar("ADMIN"), deletarUsuario);
 
 export default router;

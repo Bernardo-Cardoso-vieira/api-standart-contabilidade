@@ -27,12 +27,12 @@ export async function register(req, res, next) {
 
     const senhaHash = await hashSenha(senha);
 
-    const aluno = await prisma.aluno.create({
+    const usuario = await prisma.usuario.create({
       data: { nome, email, senhaHash, cidade, frase, planosFuturos },
       select: selectSemSenha,
     });
 
-    res.status(201).json(aluno);
+    res.status(201).json(usuario);
   } catch (erro) {
     if (erro.code === "P2002") {
       return res.status(409).json({ erro: "Email já cadastrado" });
@@ -46,19 +46,19 @@ export async function login(req, res, next) {
   try {
     const { email, senha } = req.body;
 
-    // busca o aluno COM senhaHash (único lugar que precisa dele)
-    const aluno = await prisma.aluno.findUnique({ where: { email } });
+    // busca o usuário COM senhaHash (único lugar que precisa dele)
+    const usuario = await prisma.usuario.findUnique({ where: { email } });
 
-    if (!aluno) {
+    if (!usuario) {
       return res.status(401).json({ erro: "Credenciais inválidas" });
     }
 
-    const senhaConfere = await verificarSenha(senha, aluno.senhaHash);
+    const senhaConfere = await verificarSenha(senha, usuario.senhaHash);
     if (!senhaConfere) {
       return res.status(401).json({ erro: "Credenciais inválidas" });
     }
 
-    const token = gerarToken(aluno);
+    const token = gerarToken(usuario);
     res.json({ token });
   } catch (erro) {
     next(erro);

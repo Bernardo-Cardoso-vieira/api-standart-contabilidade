@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 const SEGREDO = process.env.JWT_SECRET;
 const EXPIRACAO = "7d";
 
-// gera um token assinado com id e role do aluno
-export function gerarToken(aluno) {
+// gera um token assinado com id e role do usuário
+export function gerarToken(usuario) {
   const payload = {
-    id: aluno.id,
-    role: aluno.role,
+    id: usuario.id,
+    role: usuario.role,
   };
   return jwt.sign(payload, SEGREDO, { expiresIn: EXPIRACAO });
 }

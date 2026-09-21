@@ -1,11 +1,11 @@
 info:
-  name: Atualizar aluno (logado)
+  name: Atualizar usuário (logado)
   type: http
   seq: 4
 
 http:
   method: PUT
-  url: "{{baseUrl}}/alunos/{{alunoCriadoId}}"
+  url: "{{baseUrl}}/usuarios/{{usuarioCriadoId}}"
   body:
     type: json
     data: |-
@@ -40,5 +40,5 @@ settings:
   maxRedirects: 5
 
 docs: |-
-  Requer token do DONO do perfil ({{alunoCriadoId}}).
-  Faça login com o aluno registrado (João) antes de rodar.
+  Requer token do DONO do perfil ({{usuarioCriadoId}}).
+  Faça login com o usuário registrado (João) antes de rodar.

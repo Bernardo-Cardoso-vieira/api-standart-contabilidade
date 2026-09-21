@@ -3,63 +3,63 @@ import { hashSenha } from "../utils/senha.js";
 
 // upsert: o seed pode rodar várias vezes sem quebrar no email @unique
 async function main() {
-  const maria = await prisma.aluno.upsert({
-    where: { email: "maria@email.com" },
+  const maria = await prisma.usuario.upsert({
+    where: { email: "usuario@email.com" },
     update: {},
     create: {
-      nome: "Maria Silva",
-      email: "maria@email.com",
+      nome: "João Usuário",
+      email: "usuario@email.com",
       senhaHash: await hashSenha("senha123"), // USER — senha de teste: senha123
-      cidade: "Salinas",
-      frase: "Bora que bora!",
-      planosFuturos: "Cursar Ciência da Computação",
+      cidade: "Belo Horizonte",
+      frase: "Sempre aprendendo.",
+      planosFuturos: "Conhecer novas tecnologias",
     },
   });
-  console.log("Aluno criado:", maria.nome);
+  console.log("Usuário criado:", maria.nome);
 
-  const admin = await prisma.aluno.upsert({
-    where: { email: "admin@email.com" },
+  const admin = await prisma.usuario.upsert({
+    where: { email: "admin@biblioteca.com" },
     update: {},
     create: {
-      nome: "Prof. Ana Admin",
-      email: "admin@email.com",
+      nome: "Admin Biblioteca",
+      email: "admin@biblioteca.com",
       senhaHash: await hashSenha("admin123"), // ADMIN — senha de teste: admin123
-      cidade: "Salinas",
+      cidade: "Belo Horizonte",
       role: "ADMIN",
     },
   });
   console.log("Admin criado:", admin.nome);
 
-  const joao = await prisma.aluno.upsert({
-    where: { email: "joao.test2e@email.com" },
+  const joao = await prisma.usuario.upsert({
+    where: { email: "maria@biblioteca.com" },
     update: {},
     create: {
-      nome: "João Teste",
-      email: "joao.test2e@email.com",
+      nome: "Maria Leitora",
+      email: "maria@biblioteca.com",
       senhaHash: await hashSenha("joao123"),
-      cidade: "Salinas",
-      frase: "Em testes",
-      planosFuturos: "Aprender Node.js",
+      cidade: "Belo Horizonte",
+      frase: "Uma boa história sempre fica.",
+      planosFuturos: "Ler mais clássicos",
     },
   });
-  console.log("Aluno criado:", joao.nome);
+  console.log("Usuário criado:", joao.nome);
 
   console.log("Usuários de desenvolvimento:");
-  console.log("Maria: maria@email.com / senha123");
-  console.log("João: joao.test2e@email.com / joao123");
-  console.log("Admin: admin@email.com / admin123");
+  console.log("Usuário: usuario@email.com / senha123");
+  console.log("Usuária: maria@biblioteca.com / joao123");
+  console.log("Admin: admin@biblioteca.com / admin123");
 
   const mensagens = [
     {
-      texto: "Salve, turma! Vamos com tudo nesse último ano!",
+      texto: "Bem-vindo à biblioteca! Vamos compartilhar boas leituras.",
       autorId: maria.id,
     },
     {
-      texto: "Não esqueçam de enviar as fotos para o yearbook.",
+      texto: "Uma mensagem para lembrar do livro que mudou sua perspectiva.",
       autorId: joao.id,
     },
     {
-      texto: "A comissão está organizando a página da turma.",
+      texto: "A biblioteca está recebendo novas recomendações.",
       autorId: maria.id,
     },
   ];

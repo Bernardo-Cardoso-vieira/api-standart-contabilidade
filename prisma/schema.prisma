@@ -15,18 +15,17 @@ enum Role {
 }
 
 // Model Mensagem — representa a tabela "Mensagem" no banco
-// (🎯 Desafio do aluno — solução completa)
 model Mensagem {
   id        Int      @id @default(autoincrement())
   texto     String
   imagemUrl String?
   autorId   Int
-  autor     Aluno    @relation(fields: [autorId], references: [id], onDelete: Cascade)
+  autor     Usuario  @relation(fields: [autorId], references: [id], onDelete: Cascade)
   criadoEm  DateTime @default(now())
 }
   
-// Model Aluno — representa a tabela "Aluno" no banco
-model Aluno {
+// Model Usuario — representa a tabela "Usuario" no banco
+model Usuario {
   id            Int        @id @default(autoincrement())
   nome          String
   email         String     @unique

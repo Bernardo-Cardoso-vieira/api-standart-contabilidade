@@ -1,11 +1,11 @@
 info:
-  name: DELETE aluno sem token
+  name: DELETE usuário sem token
   type: http
   seq: 6
 
 http:
   method: DELETE
-  url: "{{baseUrl}}/alunos/{{alunoCriadoId}}"
+  url: "{{baseUrl}}/usuarios/{{usuarioCriadoId}}"
 
 runtime:
   scripts:

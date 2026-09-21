@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "texto": "O cachorro está indo embora"
+        "texto": "Uma mensagem sobre uma boa leitura"
       }
   auth:
     type: bearer
@@ -32,7 +32,7 @@ runtime:
         });
 
         test("deve conter o texto enviado", function() {
-          expect(res.getBody().texto).to.equal('O cachorro está indo embora');
+          expect(res.getBody().texto).to.equal('Uma mensagem sobre uma boa leitura');
         });
 
         test("deve retornar id gerado", function() {

@@ -31,7 +31,7 @@ export async function criarMensagem(req, res, next) {
       data: {
         texto,
         imagemUrl,
-        autorId: req.aluno.id, // autor = quem está logado
+        autorId: req.usuario.id, // autor = quem está logado
       },
     });
     res.status(201).json(novaMensagem);
@@ -51,8 +51,8 @@ export async function deletarMensagem(req, res, next) {
       return res.status(404).json({ erro: "Mensagem não encontrada" });
     }
 
-    const ehDono = mensagem.autorId === req.aluno.id;
-    const ehAdmin = req.aluno.role === "ADMIN";
+    const ehDono = mensagem.autorId === req.usuario.id;
+    const ehAdmin = req.usuario.role === "ADMIN";
     if (!ehDono && !ehAdmin) {
       return res
         .status(403)

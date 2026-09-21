@@ -1,0 +1,34 @@
+info:
+  name: Atualizar usuário de outro usuário
+  type: http
+  seq: 8
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/usuarios/{{usuarioCriadoId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "frase": "Tentativa indevida"
+      }
+  auth:
+    type: bearer
+    token: "{{tokenMaria}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("deve bloquear a atualização de outro usuário", function() {
+          expect(res.getStatus()).to.equal(403);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Requer login da usuária Maria e um usuário diferente criado pelo request Register.

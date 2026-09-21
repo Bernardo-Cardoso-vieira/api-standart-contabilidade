@@ -1,5 +1,5 @@
 info:
-  name: Login Maria
+  name: Login Usuária
   type: http
   seq: 3
 
@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "email": "maria@email.com",
+        "email": "maria@biblioteca.com",
         "senha": "senha123"
       }
 

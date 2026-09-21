@@ -16,7 +16,7 @@ runtime:
         });
 
         test("deve retornar a mensagem de boas-vindas", function() {
-          expect(res.getBody().mensagem).to.contain('Yearbook API');
+          expect(res.getBody().mensagem).to.contain('Biblioteca API');
         });
 
 settings:

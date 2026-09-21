@@ -1,11 +1,11 @@
 info:
-  name: Atualizar aluno sem token
+  name: Atualizar usuário sem token
   type: http
   seq: 5
 
 http:
   method: PUT
-  url: "{{baseUrl}}/alunos/1"
+  url: "{{baseUrl}}/usuarios/1"
   body:
     type: json
     data: |-

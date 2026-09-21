@@ -1,6 +1,10 @@
-# Yearbook Backend
+# Biblioteca Backend
 
-Back-end da aplicação **Yearbook Digital**, desenvolvido para registrar perfis dos alunos e mensagens da turma. Este repositório contém somente a API; o front-end pode consumi-la por HTTP.
+Back-end da aplicação **Biblioteca Digital**, desenvolvido para registrar perfis de usuários e mensagens. Este repositório contém somente a API; o front-end pode consumi-la por HTTP.
+
+## Mapeamento do domínio
+
+Para adaptar o domínio original sem alterar a arquitetura, `Aluno` foi substituído por `Usuario`. A entidade `Mensagem` foi mantida como o conteúdo criado por um usuário autenticado.
 
 ## Stack
 
@@ -16,7 +20,7 @@ Back-end da aplicação **Yearbook Digital**, desenvolvido para registrar perfis
 
 ```text
 .
-├── controllers/          Regras de negócio de autenticação, alunos e mensagens
+├── controllers/          Regras de negócio de autenticação, usuários e mensagens
 ├── routes/               Rotas Express
 ├── middlewares/          Autenticação, autorização, logs e erros
 ├── utils/                Hash de senha e JWT
@@ -52,7 +56,7 @@ Instale:
 
 ```bash
 git clone <URL_DO_REPOSITORIO>
-cd 26webm-yearbook-backend
+cd api-biblioteca-joao
 npm install
 ```
 
@@ -86,9 +90,9 @@ node prisma/seed.js
 
 O seed é idempotente e pode ser executado mais de uma vez. Em um banco novo, ele cria:
 
-- aluno: `maria@email.com` / `senha123`;
-- administrador: `admin@email.com` / `admin123`;
-- uma mensagem inicial da Maria.
+- usuário: `usuario@email.com` / `senha123`;
+- administrador: `admin@biblioteca.com` / `admin123`;
+- mensagens iniciais de usuários da biblioteca.
 
 Essas credenciais são apenas para desenvolvimento. Troque-as ou remova os dados antes de qualquer uso público.
 
@@ -128,9 +132,9 @@ Resposta esperada, com um timestamp variável:
 3. Selecione o ambiente local, que aponta `baseUrl` para `http://localhost:3000`.
 4. Execute `Register` ou use os usuários criados pelo seed.
 5. Execute `Login` ou `Login Admin`. O script da requisição salva automaticamente o JWT na variável `token`.
-6. Execute as requisições de alunos e mensagens. As variáveis de IDs também são preenchidas pelos scripts da coleção quando aplicável.
+6. Execute as requisições de usuários e mensagens. As variáveis de IDs também são preenchidas pelos scripts da coleção quando aplicável.
 
-A coleção inclui casos de sucesso e de erro, como requisições sem token, aluno inexistente, mensagem sem texto e exclusão sem permissão.
+A coleção inclui casos de sucesso e de erro, como requisições sem token, usuário inexistente, mensagem sem texto e exclusão sem permissão.
 
 ## Deploy na Vercel
 
