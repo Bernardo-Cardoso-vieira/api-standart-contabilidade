@@ -1,0 +1,40 @@
+info:
+  name: Cadastrar serviço (ADMIN)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/servicos"
+  body:
+    type: json
+    data: |-
+      {
+        "titulo": "Contabilidade consultiva",
+        "descricao": "Decisões financeiras mais claras para a sua empresa."
+      }
+  auth:
+    type: bearer
+    token: "{{tokenAdmin}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getStatus() === 201) {
+          bru.setVar("servicoCriadoId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("deve criar o serviço", function() {
+          expect(res.getStatus()).to.equal(201);
+        });
+        test("deve retornar o serviço sem senhaHash", function() {
+          expect(res.getBody()).to.not.have.property('senhaHash');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

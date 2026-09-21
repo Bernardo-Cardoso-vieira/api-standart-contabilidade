@@ -10,8 +10,8 @@ http:
     type: json
     data: |-
       {
-        "email": "admin@biblioteca.com",
-        "senha": "admin123"
+        "usuario": "vanderlucio",
+        "senha": "silva"
       }
 
 runtime:

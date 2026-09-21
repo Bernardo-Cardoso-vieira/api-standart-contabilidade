@@ -3,8 +3,9 @@ import express from "express"; // importa o Express
 import cors from "cors"; // novo import
 import logger from "./middlewares/logger.js"; // importa o middleware de log
 import tratarErro from "./middlewares/erro.js"; // novo import
-import usuariosRouter from "./routes/alunos.js"; // importa o router de usuários
-import mensagensRouter from "./routes/mensagens.js"; // importa o router de mensagens
+import usuariosRouter from "./routes/usuarios.js";
+import servicosRouter from "./routes/servicos.js";
+import funcionariosRouter from "./routes/funcionarios.js";
 import authRouter from "./routes/auth.js";
 
 const app = express();
@@ -16,7 +17,7 @@ app.use(logger); // 3º — registra log de cada requisição
 
 // rota raiz — boas-vindas
 app.get("/", (req, res) => {
-  res.json({ mensagem: "Biblioteca API está no ar!" });
+  res.json({ mensagem: "Standart Contabilidade API está no ar!" });
 });
 
 // rota de health check
@@ -30,8 +31,11 @@ app.use("/auth", authRouter);
 // registra as rotas de usuários com prefixo /usuarios
 app.use("/usuarios", usuariosRouter);
 
-// registra as rotas de mensagens com prefixo /mensagens
-app.use("/mensagens", mensagensRouter);
+// catálogo público e administração dos serviços
+app.use("/servicos", servicosRouter);
+
+// equipe pública e administração dos funcionários
+app.use("/funcionarios", funcionariosRouter);
 
 // Middleware de erro — SEMPRE por último, depois das rotas
 app.use(tratarErro);

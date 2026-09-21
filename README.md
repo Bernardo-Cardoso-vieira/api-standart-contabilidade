@@ -1,10 +1,10 @@
-# Biblioteca Backend
+# Standart Contabilidade API
 
-Back-end da aplicação **Biblioteca Digital**, desenvolvido para registrar perfis de usuários e mensagens. Este repositório contém somente a API; o front-end pode consumi-la por HTTP.
+Back-end da landing page da **Standart Contabilidade**, com catálogo de serviços, equipe e autenticação administrativa.
 
 ## Mapeamento do domínio
 
-Para adaptar o domínio original sem alterar a arquitetura, `Aluno` foi substituído por `Usuario`. A entidade `Mensagem` foi mantida como o conteúdo criado por um usuário autenticado.
+Para adaptar o domínio sem alterar a arquitetura, `Aluno` foi substituído por `Usuario`, `Mensagem` por `Servico` e foi adicionada a entidade `Funcionario`. As regras continuam distribuídas entre rotas, middlewares, controllers e Prisma.
 
 ## Stack
 
@@ -20,7 +20,7 @@ Para adaptar o domínio original sem alterar a arquitetura, `Aluno` foi substitu
 
 ```text
 .
-├── controllers/          Regras de negócio de autenticação, usuários e mensagens
+├── controllers/          Regras de autenticação, serviços e funcionários
 ├── routes/               Rotas Express
 ├── middlewares/          Autenticação, autorização, logs e erros
 ├── utils/                Hash de senha e JWT
@@ -90,9 +90,8 @@ node prisma/seed.js
 
 O seed é idempotente e pode ser executado mais de uma vez. Em um banco novo, ele cria:
 
-- usuário: `usuario@email.com` / `senha123`;
-- administrador: `admin@biblioteca.com` / `admin123`;
-- mensagens iniciais de usuários da biblioteca.
+- administrador: usuário `vanderlucio` / senha `silva`;
+- serviços iniciais da Standart Contabilidade.
 
 Essas credenciais são apenas para desenvolvimento. Troque-as ou remova os dados antes de qualquer uso público.
 
@@ -132,9 +131,9 @@ Resposta esperada, com um timestamp variável:
 3. Selecione o ambiente local, que aponta `baseUrl` para `http://localhost:3000`.
 4. Execute `Register` ou use os usuários criados pelo seed.
 5. Execute `Login` ou `Login Admin`. O script da requisição salva automaticamente o JWT na variável `token`.
-6. Execute as requisições de usuários e mensagens. As variáveis de IDs também são preenchidas pelos scripts da coleção quando aplicável.
+6. Execute as requisições de usuários, serviços e funcionários. As variáveis de IDs também são preenchidas pelos scripts da coleção quando aplicável.
 
-A coleção inclui casos de sucesso e de erro, como requisições sem token, usuário inexistente, mensagem sem texto e exclusão sem permissão.
+A coleção inclui casos de sucesso e de erro, como login administrativo, criação de serviço, cadastro de funcionário, requisições sem token e exclusões de registros inexistentes.
 
 ## Deploy na Vercel
 

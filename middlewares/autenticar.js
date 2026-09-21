@@ -18,16 +18,16 @@ export default async function autenticar(req, res, next) {
   }
 
   try {
-    const usuario = await prisma.usuario.findUnique({
+    const usuarioEncontrado = await prisma.usuario.findUnique({
       where: { id: payload.id },
       select: { id: true, role: true },
     });
 
-    if (!usuario) {
+    if (!usuarioEncontrado) {
       return res.status(401).json({ erro: "Token inválido ou expirado" });
     }
 
-    req.usuario = usuario;
+    req.usuario = usuarioEncontrado;
     next();
   } catch (erro) {
     next(erro);

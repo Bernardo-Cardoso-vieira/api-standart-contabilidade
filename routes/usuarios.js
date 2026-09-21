@@ -4,7 +4,7 @@ import {
   buscarUsuario,
   atualizarUsuario,
   deletarUsuario,
-} from "../controllers/alunosController.js";
+} from "../controllers/usuariosController.js";
 import autenticar from "../middlewares/autenticar.js";
 import autorizar from "../middlewares/autorizar.js";
 

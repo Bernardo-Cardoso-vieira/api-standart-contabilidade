@@ -3,27 +3,33 @@ import { hashSenha } from "../utils/senha.js";
 
 // upsert: o seed pode rodar várias vezes sem quebrar no email @unique
 async function main() {
-  const maria = await prisma.usuario.upsert({
+  const usuario = await prisma.usuario.upsert({
     where: { email: "usuario@email.com" },
     update: {},
     create: {
-      nome: "João Usuário",
+      nome: "Vanderlucio Silva",
       email: "usuario@email.com",
-      senhaHash: await hashSenha("senha123"), // USER — senha de teste: senha123
+      senhaHash: await hashSenha("silva"),
       cidade: "Belo Horizonte",
       frase: "Sempre aprendendo.",
       planosFuturos: "Conhecer novas tecnologias",
     },
   });
-  console.log("Usuário criado:", maria.nome);
+  console.log("Usuário criado:", usuario.nome);
 
   const admin = await prisma.usuario.upsert({
     where: { email: "admin@biblioteca.com" },
-    update: {},
+    update: {
+      nome: "Vanderlucio Silva",
+      usuario: "vanderlucio",
+      senhaHash: await hashSenha("silva"),
+      role: "ADMIN",
+    },
     create: {
-      nome: "Admin Biblioteca",
+      nome: "Vanderlucio Silva",
       email: "admin@biblioteca.com",
-      senhaHash: await hashSenha("admin123"), // ADMIN — senha de teste: admin123
+      usuario: "vanderlucio",
+      senhaHash: await hashSenha("silva"),
       cidade: "Belo Horizonte",
       role: "ADMIN",
     },
@@ -34,44 +40,46 @@ async function main() {
     where: { email: "maria@biblioteca.com" },
     update: {},
     create: {
-      nome: "Maria Leitora",
+      nome: "Ana Contadora",
       email: "maria@biblioteca.com",
-      senhaHash: await hashSenha("joao123"),
+      senhaHash: await hashSenha("ana123"),
       cidade: "Belo Horizonte",
-      frase: "Uma boa história sempre fica.",
-      planosFuturos: "Ler mais clássicos",
+      frase: "Precisão para cuidar do seu negócio.",
+      planosFuturos: "Ajudar empresas a crescer",
     },
   });
   console.log("Usuário criado:", joao.nome);
 
   console.log("Usuários de desenvolvimento:");
-  console.log("Usuário: usuario@email.com / senha123");
-  console.log("Usuária: maria@biblioteca.com / joao123");
-  console.log("Admin: admin@biblioteca.com / admin123");
+  console.log("Admin: vanderlucio / silva");
+  console.log("Funcionária: maria@biblioteca.com / ana123");
 
-  const mensagens = [
+  const servicos = [
     {
-      texto: "Bem-vindo à biblioteca! Vamos compartilhar boas leituras.",
-      autorId: maria.id,
+      titulo: "Contabilidade consultiva",
+      descricao: "Decisões financeiras mais claras para a sua empresa.",
+      autorId: usuario.id,
     },
     {
-      texto: "Uma mensagem para lembrar do livro que mudou sua perspectiva.",
+      titulo: "Abertura e regularização de empresas",
+      descricao: "Cuidamos da burocracia para você começar com segurança.",
       autorId: joao.id,
     },
     {
-      texto: "A biblioteca está recebendo novas recomendações.",
-      autorId: maria.id,
+      titulo: "Folha de pagamento",
+      descricao: "Rotinas trabalhistas organizadas e dentro do prazo.",
+      autorId: usuario.id,
     },
   ];
 
-  for (const dados of mensagens) {
-    const jaTemMensagem = await prisma.mensagem.findFirst({
+  for (const dados of servicos) {
+    const jaTemServico = await prisma.servico.findFirst({
       where: dados,
     });
 
-    if (!jaTemMensagem) {
-      const mensagem = await prisma.mensagem.create({ data: dados });
-      console.log("Mensagem criada:", mensagem.texto);
+    if (!jaTemServico) {
+      const servico = await prisma.servico.create({ data: dados });
+      console.log("Serviço criado:", servico.titulo);
     }
   }
 }

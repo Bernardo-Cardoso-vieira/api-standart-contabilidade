@@ -1,7 +1,7 @@
 {
-  "name": "26webm-yearbook-backend",
+  "name": "standart-contabilidade-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API da landing page da Standart Contabilidade",
   "main": "index.js",
   "type": "module",
   "scripts": {

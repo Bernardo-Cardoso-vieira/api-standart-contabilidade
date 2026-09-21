@@ -6,6 +6,7 @@ const selectSemSenha = {
   id: true,
   nome: true,
   email: true,
+  usuario: true,
   cidade: true,
   frase: true,
   planosFuturos: true,
@@ -17,7 +18,7 @@ const selectSemSenha = {
 // POST /auth/register
 export async function register(req, res, next) {
   try {
-    const { nome, email, senha, cidade, frase, planosFuturos } = req.body;
+    const { nome, email, usuario: nomeUsuario, senha, cidade, frase, planosFuturos } = req.body;
 
     if (!nome || !email || !senha) {
       return res
@@ -27,12 +28,12 @@ export async function register(req, res, next) {
 
     const senhaHash = await hashSenha(senha);
 
-    const usuario = await prisma.usuario.create({
-      data: { nome, email, senhaHash, cidade, frase, planosFuturos },
+    const usuarioCriado = await prisma.usuario.create({
+      data: { nome, email, usuario: nomeUsuario, senhaHash, cidade, frase, planosFuturos },
       select: selectSemSenha,
     });
 
-    res.status(201).json(usuario);
+    res.status(201).json(usuarioCriado);
   } catch (erro) {
     if (erro.code === "P2002") {
       return res.status(409).json({ erro: "Email já cadastrado" });
@@ -44,21 +45,27 @@ export async function register(req, res, next) {
 // POST /auth/login
 export async function login(req, res, next) {
   try {
-    const { email, senha } = req.body;
+    const { email, usuario, senha } = req.body;
+
+    if ((!email && !usuario) || !senha) {
+      return res.status(400).json({ erro: "usuario ou email e senha são obrigatórios" });
+    }
 
     // busca o usuário COM senhaHash (único lugar que precisa dele)
-    const usuario = await prisma.usuario.findUnique({ where: { email } });
+    const usuarioEncontrado = await prisma.usuario.findFirst({
+      where: email ? { email } : { usuario },
+    });
 
-    if (!usuario) {
+    if (!usuarioEncontrado) {
       return res.status(401).json({ erro: "Credenciais inválidas" });
     }
 
-    const senhaConfere = await verificarSenha(senha, usuario.senhaHash);
+    const senhaConfere = await verificarSenha(senha, usuarioEncontrado.senhaHash);
     if (!senhaConfere) {
       return res.status(401).json({ erro: "Credenciais inválidas" });
     }
 
-    const token = gerarToken(usuario);
+    const token = gerarToken(usuarioEncontrado);
     res.json({ token });
   } catch (erro) {
     next(erro);

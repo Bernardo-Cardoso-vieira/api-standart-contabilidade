@@ -14,21 +14,36 @@ enum Role {
   ADMIN
 }
 
-// Model Mensagem — representa a tabela "Mensagem" no banco
-model Mensagem {
-  id        Int      @id @default(autoincrement())
-  texto     String
-  imagemUrl String?
-  autorId   Int
-  autor     Usuario  @relation(fields: [autorId], references: [id], onDelete: Cascade)
-  criadoEm  DateTime @default(now())
+// Model Servico — serviço oferecido pela Standart Contabilidade
+model Servico {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  descricao   String
+  imagemUrl   String?
+  autorId     Int
+  autor       Usuario  @relation("ServicosCriados", fields: [autorId], references: [id], onDelete: Cascade)
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
 }
-  
-// Model Usuario — representa a tabela "Usuario" no banco
+
+// Model Funcionario — equipe exibida pela contabilidade
+model Funcionario {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  cargo       String
+  email       String?
+  telefone    String?
+  fotoUrl     String?
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+}
+
+// Model Usuario — autenticação e autorização da aplicação
 model Usuario {
   id            Int        @id @default(autoincrement())
   nome          String
   email         String     @unique
+  usuario       String?    @unique
   senhaHash     String
   cidade        String?
   frase         String?
@@ -36,5 +51,5 @@ model Usuario {
   fotoUrl       String?
   role          Role       @default(USER)
   criadoEm      DateTime   @default(now())
-  mensagens     Mensagem[]
+  servicos      Servico[]  @relation("ServicosCriados")
 }

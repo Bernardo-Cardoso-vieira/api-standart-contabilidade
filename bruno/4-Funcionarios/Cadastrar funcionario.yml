@@ -1,0 +1,39 @@
+info:
+  name: Cadastrar funcionário (ADMIN)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/funcionarios"
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "Ana Contadora",
+        "cargo": "Contadora",
+        "email": "ana@standartcontabilidade.com",
+        "telefone": "(38) 99999-9999"
+      }
+  auth:
+    type: bearer
+    token: "{{tokenAdmin}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getStatus() === 201) {
+          bru.setVar("funcionarioCriadoId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("deve criar o funcionário", function() {
+          expect(res.getStatus()).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

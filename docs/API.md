@@ -1,6 +1,6 @@
-# API da Biblioteca Digital
+# API da Standart Contabilidade
 
-Contrato atual da API REST da Biblioteca Digital.
+Contrato atual da API REST da Standart Contabilidade.
 
 ## Acesso
 
@@ -30,9 +30,14 @@ Em produção, substitua a base URL pela URL gerada pelo deploy da Vercel.
 | `GET` | `/usuarios/:id` | Busca um usuário por ID | Não |
 | `PUT` | `/usuarios/:id` | Atualiza o próprio perfil | JWT do dono |
 | `DELETE` | `/usuarios/:id` | Exclui um usuário | JWT de `ADMIN` |
-| `GET` | `/mensagens` | Lista mensagens com dados do autor | Não |
-| `POST` | `/mensagens` | Cria uma mensagem | JWT |
-| `DELETE` | `/mensagens/:id` | Exclui uma mensagem | JWT do dono ou `ADMIN` |
+| `GET` | `/servicos` | Lista serviços da contabilidade | Não |
+| `POST` | `/servicos` | Cadastra um serviço | JWT de `ADMIN` |
+| `PUT` | `/servicos/:id` | Edita um serviço | JWT de `ADMIN` |
+| `DELETE` | `/servicos/:id` | Remove um serviço | JWT de `ADMIN` |
+| `GET` | `/funcionarios` | Lista a equipe | Não |
+| `POST` | `/funcionarios` | Cadastra um funcionário | JWT de `ADMIN` |
+| `PUT` | `/funcionarios/:id` | Edita um funcionário | JWT de `ADMIN` |
+| `DELETE` | `/funcionarios/:id` | Remove um funcionário | JWT de `ADMIN` |
 
 O cadastro de usuários é feito por `/auth/register`. A API não possui `POST /usuarios`.
 
@@ -88,15 +93,15 @@ Autentica um usuário e retorna um token JWT.
 
 ```json
 {
-  "email": "joao@example.com",
-  "senha": "joao123"
+  "usuario": "vanderlucio",
+  "senha": "silva"
 }
 ```
 
 #### Respostas
 
 - `200 OK`: login realizado;
-- `401 Unauthorized`: email ou senha inválidos;
+- `401 Unauthorized`: usuário/email ou senha inválidos;
 - `500 Internal Server Error`: erro inesperado.
 
 Exemplo de resposta `200`:
@@ -141,7 +146,7 @@ Retorna `200 OK`:
 
 ```json
 {
-  "mensagem": "Biblioteca API está no ar!"
+  "mensagem": "Standart Contabilidade API está no ar!"
 }
 ```
 
@@ -215,80 +220,35 @@ Resposta de acesso negado:
 }
 ```
 
-## Mensagens
+## Serviços
 
-### Listar mensagens — `GET /mensagens`
-
-Retorna `200 OK` com as mensagens ordenadas da mais nova para a mais antiga. Cada mensagem inclui os dados públicos do autor:
-
-```json
-[
-  {
-    "id": 1,
-    "texto": "Salve, turma!",
-    "imagemUrl": null,
-    "autorId": 1,
-    "criadoEm": "2026-08-19T12:00:00.000Z",
-    "autor": {
-      "nome": "João Usuário",
-      "fotoUrl": null
-    }
-  }
-]
-```
-
-### Criar mensagem — `POST /mensagens`
-
-Requer um JWT válido. O autor é definido automaticamente pelo usuário autenticado; não é necessário enviar `autorId`.
-
-#### Requisição
+`GET /servicos` é público. As operações de criação, edição e remoção exigem JWT com `role: "ADMIN"`.
 
 ```json
 {
-  "texto": "Mensagem da turma",
-  "imagemUrl": "https://exemplo.com/imagem.jpg"
+  "titulo": "Contabilidade consultiva",
+  "descricao": "Decisões financeiras mais claras para a sua empresa.",
+  "imagemUrl": "https://exemplo.com/contabilidade.jpg"
 }
 ```
 
-O campo `texto` é obrigatório e `imagemUrl` é opcional. Os campos de imagem são URLs; a API não realiza upload de arquivos.
+`titulo` e `descricao` são obrigatórios. O `autorId` é preenchido pelo usuário administrativo autenticado.
 
-#### Respostas
+## Funcionários
 
-- `201 Created`: mensagem criada;
-- `400 Bad Request`: o campo `texto` não foi enviado;
-- `401 Unauthorized`: token ausente, inválido ou expirado;
-- `500 Internal Server Error`: erro inesperado.
-
-Exemplo de resposta `201`:
+`GET /funcionarios` é público para a landing page. Criar, editar e remover funcionários exige JWT de administrador.
 
 ```json
 {
-  "id": 2,
-  "texto": "Mensagem da turma",
-  "imagemUrl": "https://exemplo.com/imagem.jpg",
-  "autorId": 1,
-  "criadoEm": "2026-08-19T12:00:00.000Z"
+  "nome": "Ana Contadora",
+  "cargo": "Contadora",
+  "email": "ana@standartcontabilidade.com",
+  "telefone": "(38) 99999-9999",
+  "fotoUrl": "https://exemplo.com/ana.jpg"
 }
 ```
 
-### Excluir mensagem — `DELETE /mensagens/:id`
-
-Requer token do autor da mensagem ou de um administrador.
-
-#### Respostas
-
-- `204 No Content`: mensagem excluída;
-- `401 Unauthorized`: token ausente, inválido ou expirado;
-- `403 Forbidden`: usuário não é o autor nem administrador;
-- `404 Not Found`: mensagem não encontrada.
-
-Resposta quando não há permissão:
-
-```json
-{
-  "erro": "Você não tem permissão para excluir esta mensagem"
-}
-```
+`nome` e `cargo` são obrigatórios.
 
 ## Modelos de dados
 
@@ -307,18 +267,30 @@ Resposta quando não há permissão:
 | `role` | `Role` | Sim | `USER` por padrão ou `ADMIN`. |
 | `criadoEm` | `DateTime` | Sim | Preenchido automaticamente. |
 
-### Mensagem
+### Serviço
 
 | Campo | Tipo | Obrigatório | Observação |
 | --- | --- | --- | --- |
 | `id` | `Int` | Sim | Gerado automaticamente. |
-| `texto` | `String` | Sim | Conteúdo da mensagem. |
+| `titulo` | `String` | Sim | Nome do serviço. |
+| `descricao` | `String` | Sim | Descrição apresentada na landing page. |
 | `imagemUrl` | `String` | Não | URL opcional de uma imagem. |
-| `autorId` | `Int` | Sim | Chave estrangeira para `Usuario`. |
-| `autor` | `Object` | Em listagem | Contém `nome` e `fotoUrl` do autor. |
+| `autorId` | `Int` | Sim | Chave estrangeira para `Usuario` administrador. |
 | `criadoEm` | `DateTime` | Sim | Preenchido automaticamente. |
+| `atualizadoEm` | `DateTime` | Sim | Atualizado automaticamente. |
 
-Datas são serializadas em formato ISO 8601 nas respostas JSON. A relação `Mensagem.autor` usa exclusão em cascata: ao excluir um usuário, suas mensagens também são removidas.
+### Funcionário
+
+| Campo | Tipo | Obrigatório | Observação |
+| --- | --- | --- | --- |
+| `id` | `Int` | Sim | Gerado automaticamente. |
+| `nome` | `String` | Sim | Nome do funcionário. |
+| `cargo` | `String` | Sim | Função na empresa. |
+| `email` | `String` | Não | Email público opcional. |
+| `telefone` | `String` | Não | Telefone público opcional. |
+| `fotoUrl` | `String` | Não | URL opcional da foto. |
+
+Datas são serializadas em formato ISO 8601 nas respostas JSON.
 
 ## Erros e comportamento geral
 
@@ -350,7 +322,6 @@ Depois de executar `node prisma/seed.js`, o banco contém os seguintes usuários
 
 | Perfil | Email | Senha |
 | --- | --- | --- |
-| `USER` | `usuario@email.com` | `senha123` |
-| `ADMIN` | `admin@biblioteca.com` | `admin123` |
+| `ADMIN` | `vanderlucio` | `silva` |
 
 Essas credenciais são exclusivas para desenvolvimento local e não devem ser usadas em produção.
